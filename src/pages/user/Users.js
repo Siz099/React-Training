@@ -1,37 +1,35 @@
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Table } from "antd";
-// import UserRow from "./UserRow";
-// import UserHeader from "./UserHeader";
+import axios from "axios";
 
 const Users = (props) => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]); // Initialize with an empty array
+  const [users, setUsers] = useState([]); // Fixed useState declaration
 
   const handleAddUser = () => {
     navigate("/admin/add-user");
   };
 
   useEffect(() => {
-    setUsers([
-      { id: 1, name: "John Doe", email: "abc@gmail.com", age: 25 },
-      { id: 2, name: "John Doe", email: "abc@gmail.com", age: 20 },
-      { id: 3, name: "John Doe", email: "abc@gmail.com", age: 22 },
-      { id: 4, name: "John Doe", email: "abc@gmail.com", age: 26 },
-      { id: 5, name: "John Doe", email: "abc@gmail.com", age: 28 },
-    ]);
+    axios
+      .get("http://localhost:4000/users")
+      .then((response) => {
+        setUsers(response.data); // Updating state correctly
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error);
+      });
   }, []);
 
   const columns = [
     {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      render: (_, item) => (
+        <NavLink to={`/admin/user/details/${item.id}`}>{item.name}</NavLink>
+      ),
     },
     {
       title: "Age",
@@ -43,6 +41,11 @@ const Users = (props) => {
       dataIndex: "email",
       key: "email",
     },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+    },
   ];
 
   return (
@@ -50,17 +53,7 @@ const Users = (props) => {
       <h1>{props.title}</h1>
       <p>List of registered users:</p>
       <button onClick={handleAddUser}>Add User</button>
-      <Table dataSource={users} columns={columns} />;
-      {/* <table id="users">
-        <thead>
-          <UserHeader />
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <UserRow key={user.id} row={user} />
-          ))}
-        </tbody>
-      </table> */}
+      <Table dataSource={users} columns={columns} />
     </div>
   );
 };
