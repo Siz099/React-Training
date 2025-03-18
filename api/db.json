@@ -2,7 +2,7 @@
   "users": [
     {
       "id": "8fc8296a-c505-490e-a72e-fec0892a4b0d",
-      "name": "John Doe",
+      "name": "sijan",
       "email": "abc@gmail.com",
       "age": 25,
       "role": "admin"
@@ -11,8 +11,8 @@
       "id": "d167bc2e-9b4e-4480-aca3-8ab1b8212dec",
       "name": "John Doe",
       "email": "abc@gmail.com",
-      "age": 20,
-      "role": "admin"
+      "age": 3,
+      "role": "user"
     },
     {
       "id": "d167bc2e-9b4e-4480-aca3-8ab1b8212dec",

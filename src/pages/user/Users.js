@@ -1,11 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { Table } from "antd";
+import { Table, Space } from "antd";
 import axios from "axios";
 
 const Users = (props) => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]); // Fixed useState declaration
+  const [users, setUsers] = useState([]);
 
   const handleAddUser = () => {
     navigate("/admin/add-user");
@@ -15,7 +15,7 @@ const Users = (props) => {
     axios
       .get("http://localhost:4000/users")
       .then((response) => {
-        setUsers(response.data); // Updating state correctly
+        setUsers(response.data);
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -46,6 +46,16 @@ const Users = (props) => {
       dataIndex: "role",
       key: "role",
     },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Space size="middle">
+          <NavLink to={`/admin/user/edit/${record.id}`}>Edit</NavLink>
+          <button type="button">Delete</button>
+        </Space>
+      ),
+    },
   ];
 
   return (
@@ -53,7 +63,7 @@ const Users = (props) => {
       <h1>{props.title}</h1>
       <p>List of registered users:</p>
       <button onClick={handleAddUser}>Add User</button>
-      <Table dataSource={users} columns={columns} />
+      <Table dataSource={users} columns={columns} rowKey="id" />
     </div>
   );
 };

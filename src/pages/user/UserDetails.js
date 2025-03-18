@@ -32,7 +32,7 @@ const UserDetails = () => {
     fetchUser();
 
     return () => controller.abort(); // Cleanup on unmount
-  }, [userId]); // ✅ Use `userId` instead of `params.userId`
+  }, [userId]); 
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
