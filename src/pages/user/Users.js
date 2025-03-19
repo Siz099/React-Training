@@ -1,21 +1,20 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { Table, Space } from "antd";
-import axios from "axios";
+import { Space, Table, Button, Card } from "antd";
+import { getUsers } from "../../utils/user.util";
 
 const Users = (props) => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([]); // Correct state initialization
 
   const handleAddUser = () => {
     navigate("/admin/add-user");
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/users")
+    getUsers()
       .then((response) => {
-        setUsers(response.data);
+        setUsers(response); // ✅ Corrected function name
       })
       .catch((error) => {
         console.error("Error fetching users:", error);
@@ -59,11 +58,22 @@ const Users = (props) => {
   ];
 
   return (
-    <div className="users">
-      <h1>{props.title}</h1>
-      <p>List of registered users:</p>
-      <button onClick={handleAddUser}>Add User</button>
-      <Table dataSource={users} columns={columns} rowKey="id" />
+    <div className="v-col users">
+      <Card
+        style={{
+          marginTop: 16,
+        }}
+        type="inner"
+        title={<h1>{props.title}</h1>}
+        extra={
+          <Button type="primary" onClick={handleAddUser}>
+            Add User
+          </Button>
+        }
+      >
+        <Table columns={columns} dataSource={users} rowKey="id" />{" "}
+        {/* ✅ Fixed dataSource */}
+      </Card>
     </div>
   );
 };

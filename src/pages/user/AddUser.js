@@ -1,128 +1,108 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { Button, Form, Input, Select, Card, InputNumber } from "antd";
+import { useParams, useNavigate } from "react-router-dom";
+import { createUser, getUser, updateUser } from "../../utils/user.util";
+
+const { Option } = Select;
 
 const UserAdd = () => {
+  const params = useParams();
   const navigate = useNavigate();
-  const { userId } = useParams();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [age, setAge] = useState(0);
-  const [role, setRole] = useState("");
-
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [ageError, setAgeError] = useState("");
-  const [roleError, setRoleError] = useState("");
+  const [form] = Form.useForm();
 
   useEffect(() => {
-    if (userId) {
-      axios
-        .get(`http://localhost:4000/users/${userId}`)
-        .then(function (response) {
-          const user = response.data;
-          setName(user.name);
-          setEmail(user.email);
-          setAge(user.age);
-          setRole(user.role);
-        })
-        .catch(function (error) {
-          console.log(error);
+    if (params.userId) {
+      getUser(params.userId).then((data) => {
+        form.setFieldsValue({
+          name: data.name || "",
+          age: data.age || 0,
+          email: data.email || "",
+          role: data.role || "user",
         });
+      });
+    } else {
+      form.resetFields();
     }
-  }, [userId]);
+  }, [params.userId, form]);
 
-  const validate = () => {
-    let isValid = true;
-    setNameError("");
-    setEmailError("");
-    setAgeError("");
-    setRoleError("");
-
-    if (!name.trim()) {
-      setNameError("Name is required");
-      isValid = false;
+  const onFinish = async (values) => {
+    console.log("Received values of form: ", values);
+    try {
+      if (!params.userId) {
+        await createUser(values);
+      } else {
+        await updateUser(params.userId, values);
+      }
+      navigate("/admin/users");
+    } catch (error) {
+      console.error("Error saving user:", error);
     }
-    if (!email.trim()) {
-      setEmailError("Email is required");
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Invalid email format");
-      isValid = false;
-    }
-    if (age <= 0) {
-      setAgeError("Age must be greater than 0");
-      isValid = false;
-    }
-    if (!role) {
-      setRoleError("Role is required");
-      isValid = false;
-    }
-    return isValid;
   };
 
-  const handleSubmit = async () => {
-    if (validate()) {
-      const user = { name, email, age, role };
-      try {
-        if (userId) {
-          await axios.patch(`http://localhost:4000/users/${userId}`, user);
-          alert("User updated successfully!");
-        } else {
-          await axios.post("http://localhost:4000/users", user);
-          alert("User added successfully!");
-        }
-        navigate("/admin/users");
-      } catch (error) {
-        console.error("Error saving user:", error);
-      }
-    }
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
     <div>
-      <h1>{userId ? "Edit" : "Add"} User</h1>
-      <form>
-        <div>
-          <label>Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          {nameError && <small style={{ color: "red" }}>{nameError}</small>}
-        </div>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {emailError && <small style={{ color: "red" }}>{emailError}</small>}
-        </div>
-        <div>
-          <label>Age</label>
-          <input
-            type="number"
-            value={age}
-            onChange={(e) => setAge(Number(e.target.value))}
-          />
-          {ageError && <small style={{ color: "red" }}>{ageError}</small>}
-        </div>
-        <div>
-          <label>Role</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="">--Select Role---</option>
-            <option value="admin">Admin</option>
-            <option value="user">User</option>
-          </select>
-          {roleError && <small style={{ color: "red" }}>{roleError}</small>}
-        </div>
-        <button type="button" onClick={handleSubmit}>
-          Save
-        </button>
-      </form>
+      <Card
+        style={{ marginTop: 16 }}
+        type="inner"
+        title={<h1>{params.userId ? "Edit User" : "Add User"}</h1>}
+      >
+        <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed}>
+          <Form.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please input your name!" }]}
+          >
+            <Input placeholder="Enter full name" />
+          </Form.Item>
+
+          <Form.Item
+            name="age"
+            label="Age"
+            rules={[
+              { required: true, message: "Please input your age!" },
+              {
+                type: "number",
+                min: 1,
+                message: "Age must be a positive number!",
+              },
+            ]}
+          >
+            <InputNumber min={1} style={{ width: "100%" }} />
+          </Form.Item>
+
+          <Form.Item
+            name="email"
+            label="E-mail"
+            rules={[
+              { type: "email", message: "The input is not a valid E-mail!" },
+              { required: true, message: "Please input your E-mail!" },
+            ]}
+          >
+            <Input placeholder="Enter email address" />
+          </Form.Item>
+
+          <Form.Item
+            name="role"
+            label="Role"
+            rules={[{ required: true, message: "Please select a role!" }]}
+          >
+            <Select placeholder="Select a role">
+              <Option value="admin">Admin</Option>
+              <Option value="user">User</Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Save
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
     </div>
   );
 };

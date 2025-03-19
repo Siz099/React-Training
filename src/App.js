@@ -14,18 +14,15 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* This is the main Layout route */}
         <Route path="/" element={<Layout />}>
-          {/* Nested routes inside Layout */}
           <Route path="admin/dashboard" element={<Dashboard />} />
-          <Route path="admin/users" element={<Users title="Users" />} />
+          <Route path="admin/users" element={<Users />} />
           <Route path="admin/settings" element={<Settings />} />
           <Route path="admin/add-user" element={<AddUser />} />
           <Route path="admin/user/edit/:userId" element={<AddUser />} />
-          <Route path="/admin/user/details/:userId" element={<UserDetails />} />
+          <Route path="admin/user/details/:userId" element={<UserDetails />} />
         </Route>
 
-        {/* Login route outside Layout */}
         <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
