@@ -39,3 +39,13 @@ export const updateUser = async (id, data) => {
     throw error;
   }
 };
+
+export const checkLogin = async (email, password) => {
+  const response = await axios.get(
+    `http://localhost:4000/users/?email=${email}&password=${password}`
+  );
+  if (response.data.length === 0) {
+    return null;
+  }
+  return response.data[0];
+};

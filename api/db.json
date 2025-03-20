@@ -2,10 +2,11 @@
   "users": [
     {
       "id": "8fc8296a-c505-490e-a72e-fec0892a4b0d",
-      "name": "sijanmaharjan",
-      "email": "abc@gmail.com",
+      "name": "sijan",
+      "email": "siz@gmail.com",
       "age": 25,
-      "role": "admin"
+      "role": "admin",
+      "password": "admin"
     },
     {
       "id": "d167bc2e-9b4e-4480-aca3-8ab1b8212dec",
@@ -19,35 +20,40 @@
       "name": "John Doe",
       "email": "abc@gmail.com",
       "age": 22,
-      "role": "admin"
+      "role": "admin",
+      "password": "admin"
     },
     {
       "id": "fda62b26-a889-4a3e-b1c4-cbedcd394968",
       "name": "John Doe",
       "email": "abc@gmail.com",
       "age": 26,
-      "role": "admin"
+      "role": "admin",
+      "password": "admin"
     },
     {
       "id": "fb6504ba-5946-4daa-b242-a474db26864d",
       "name": "John Doe",
       "email": "abc@gmail.com",
       "age": 28,
-      "role": "admin"
+      "role": "admin",
+      "password": "admin"
     },
     {
       "id": "fba4",
       "name": "kjlhkbjvbhhkbh",
       "email": "adn@gmail.com",
       "age": 22,
-      "role": "admin"
+      "role": "admin",
+      "password": "admin"
     },
     {
       "id": "c06d",
       "name": "'l;kljkhjghvgcfx",
       "email": "jhgfvcx@gmail.com",
       "age": 991,
-      "role": "admin"
+      "role": "admin",
+      "password": "admin"
     }
   ]
 }

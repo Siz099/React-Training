@@ -1,4 +1,5 @@
 import "./App.css";
+import React, { useState } from "react";
 import "antd/dist/reset.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -9,23 +10,35 @@ import AddUser from "./pages/user/AddUser";
 import UserDetails from "./pages/user/UserDetails";
 import Login from "./pages/auth/Login";
 import Layout from "./components/Layout";
+import { UserContext } from "./context/user.context";
 
 const App = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="admin/dashboard" element={<Dashboard />} />
-          <Route path="admin/users" element={<Users />} />
-          <Route path="admin/settings" element={<Settings />} />
-          <Route path="admin/add-user" element={<AddUser />} />
-          <Route path="admin/user/edit/:userId" element={<AddUser />} />
-          <Route path="admin/user/details/:userId" element={<UserDetails />} />
-        </Route>
+  const [_user, _setUser] = useState(
+    localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user"))
+      : null
+  );
 
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+  return (
+    <UserContext.Provider value={{ _user, _setUser }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route path="admin/dashboard" element={<Dashboard />} />
+            <Route path="admin/users" element={<Users />} />
+            <Route path="admin/settings" element={<Settings />} />
+            <Route path="admin/add-user" element={<AddUser />} />
+            <Route path="admin/user/edit/:userId" element={<AddUser />} />
+            <Route
+              path="admin/user/details/:userId"
+              element={<UserDetails />}
+            />
+          </Route>
+
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      </BrowserRouter>
+    </UserContext.Provider>
   );
 };
 

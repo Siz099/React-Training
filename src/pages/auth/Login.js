@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button, Checkbox } from "antd";
+import { checkLogin } from "../../utils/user.util";
+import { UserContext } from "../../context/user.context";
 
 const Login = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
+  const { _setUser } = useContext(UserContext);
 
   const onFinish = (values) => {
-    if (values.username === "admin" && values.password === "admin") {
-      setMessage("Login successful");
-      localStorage.setItem("is_login", 1);
-      navigate("/admin/users");
-    } else {
-      localStorage.setItem("is_login", 0);
-      setMessage("Incorrect username or password");
-    }
+    checkLogin(values.username, values.password).then((data) => {
+      if (data === null) {
+        setMessage("Incorrect username or password");
+      } else {
+        setMessage("Login successful");
+        _setUser(data);
+        localStorage.setItem("is_login", 1);
+        localStorage.setItem("user", JSON.stringify(data));
+        navigate("/admin/users");
+      }
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
