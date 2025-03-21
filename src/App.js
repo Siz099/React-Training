@@ -11,6 +11,7 @@ import UserDetails from "./pages/user/UserDetails";
 import Login from "./pages/auth/Login";
 import Layout from "./components/Layout";
 import { UserContext } from "./context/user.context";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const [_user, _setUser] = useState(
@@ -38,6 +39,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </UserContext.Provider>
   );
 };
