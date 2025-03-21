@@ -46,14 +46,6 @@
       "age": 22,
       "role": "admin",
       "password": "admin"
-    },
-    {
-      "id": "c06d",
-      "name": "'l;kljkhjghvgcfx",
-      "email": "jhgfvcx@gmail.com",
-      "age": 991,
-      "role": "admin",
-      "password": "admin"
     }
   ]
 }

@@ -49,3 +49,7 @@ export const checkLogin = async (email, password) => {
   }
   return response.data[0];
 };
+
+export const deleteUser = async (id) => {
+  await axios.delete(`http://localhost:4000/users/${id}`);
+};
